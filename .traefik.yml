@@ -1,6 +1,6 @@
 displayName: Medad-JWT Middleware
 type: middleware
-import: github.com/NothingRealm/jwt-middleware
+import: github.com/NothingRealm/medad-jwt-middleware
 summary: 'Verify JWT Token in auth header and injects decoded payload in header or skip it if Secret-Key and Access-Key is set'
 
 testData:

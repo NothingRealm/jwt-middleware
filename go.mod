@@ -1,3 +1,3 @@
-module github.com/NothingRealm/jwt-middleware
+module github.com/NothingRealm/medad-jwt-middleware
 
 go 1.14
