@@ -30,6 +30,8 @@ type JWT struct {
 	proxyHeaderName string
 	authHeader 			string
 	headerPrefix		string
+    secretKey string
+    accessKey string
 }
 
 func New(ctx context.Context, next http.Handler, config *Config, name string) (http.Handler, error) {
@@ -47,6 +49,14 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 		config.HeaderPrefix = "Bearer"
 	}
 
+	if len(config.secretKey) == 0 {
+		config.secretKey = "Secret-Key"
+	}
+
+	if len(config.accessKey) == 0 {
+		config.secretKey = "Access-Key"
+	}
+
 	return &JWT{
 		next:		next,
 		name:		name,
@@ -59,6 +69,14 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 
 func (j *JWT) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	headerToken := req.Header.Get(j.authHeader)
+
+    secretKey := req.Header.Get(j.secretKey)
+    accessKey := req.Header.Get(j.accessKey)
+
+    if len(secretKey) != 0 && len(accessKey) != 0 {
+		j.next.ServeHTTP(res, req)
+        return
+    }
 
 	if len(headerToken) == 0 {
 		http.Error(res, "Request error", http.StatusUnauthorized)
